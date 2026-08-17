@@ -132,10 +132,17 @@ class _ArDrawingScreenState extends State<ArDrawingScreen>
 
 
 
-  void _onScaleUpdate(ScaleUpdateDetails details) {
+double _startingScale = 1.0;
+
+void _onScaleStart(ScaleStartDetails details) {
+  _startingScale = _imageScale;
+}
+
+void _onScaleUpdate(ScaleUpdateDetails details) {
   setState(() {
     _imagePosition += details.focalPointDelta;
-    _imageScale = (_imageScale * details.scale).clamp(0.1, 5.0);
+    _imageScale =
+        (_startingScale * details.scale).clamp(0.1, 5.0);
   });
 }
 
@@ -196,7 +203,7 @@ class _ArDrawingScreenState extends State<ArDrawingScreen>
           CameraView(controller: _cameraController),
           if (_selectedImage != null && _selectedImageBytes != null)
             GestureDetector(
-
+            onScaleStart: _onScaleStart,
               onScaleUpdate: _onScaleUpdate,
               child: SizedBox.expand(
                 child: Stack(
