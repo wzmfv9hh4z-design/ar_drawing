@@ -130,17 +130,14 @@ class _ArDrawingScreenState extends State<ArDrawingScreen>
     });
   }
 
-  void _onPanUpdate(DragUpdateDetails details) {
-    setState(() {
-      _imagePosition += details.delta;
-    });
-  }
+
 
   void _onScaleUpdate(ScaleUpdateDetails details) {
-    setState(() {
-      _imageScale = (_imageScale * details.scale).clamp(0.1, 5.0);
-    });
-  }
+  setState(() {
+    _imagePosition += details.focalPointDelta;
+    _imageScale = (_imageScale * details.scale).clamp(0.1, 5.0);
+  });
+}
 
   void _onRotationUpdate(double degrees) {
     setState(() {
@@ -199,7 +196,7 @@ class _ArDrawingScreenState extends State<ArDrawingScreen>
           CameraView(controller: _cameraController),
           if (_selectedImage != null && _selectedImageBytes != null)
             GestureDetector(
-              onPanUpdate: _onPanUpdate,
+
               onScaleUpdate: _onScaleUpdate,
               child: SizedBox.expand(
                 child: Stack(
